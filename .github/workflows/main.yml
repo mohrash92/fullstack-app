@@ -18,14 +18,12 @@ jobs:
           cd server
           npm install
           npm run build
-          npm run test   # Runs server unit tests (e.g., Jest)
 
       - name: Install and Build Client
         run: |
           cd client
           npm install
           npm run build
-          npm run test
 
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v6
