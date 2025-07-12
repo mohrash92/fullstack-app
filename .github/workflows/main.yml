@@ -3,21 +3,34 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Install and Test Server
+
+      - name: Install and Build Server
         run: |
           cd server
           npm install
           npm run build
-      - name: Install and Test Client
+          npm run test   # Runs server unit tests (e.g., Jest)
+
+      - name: Install and Build Client
         run: |
           cd client
           npm install
           npm run build
+          npm run test
+
+      - name: Run Cypress E2E Tests
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: client
+          start: npm start
+          wait-on: 'http://localhost:3000' 
+          wait-on-timeout: 60
